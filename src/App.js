@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React, { Fragment, useCallback, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import NewsList from "./components/NewsList";
+import Categories from "./components/Categories";
 
 function App() {
-  const [data, setData] = useState(null);
-  const onClick = async () => {
-    try {
-      const response = await axios.get(
-        " https://newsapi.org/v2/top-headlines?country=ca&apiKey=d323e20b89124db0bf6385868964d567"
-      );
-      setData(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  return <NewsList />;
+  const [category, setCategory] = useState("all");
+  const onSelect = useCallback((category) => setCategory(category), []);
+
+  return (
+    <Fragment>
+      <Categories category={category} onSelect={onSelect} />
+      <NewsList category={category} />
+    </Fragment>
+  );
 }
 
 export default App;
